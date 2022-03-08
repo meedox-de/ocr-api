@@ -1,9 +1,9 @@
 <?php
 
 ################# Fehlermeldung anzeigen #################
-serror_reporting(0);
+//error_reporting(0);
 //error_reporting(E_ALL);
-//error_reporting( -1 );
+error_reporting( -1 );
 
 // enables temporary debugging in live system
 /*

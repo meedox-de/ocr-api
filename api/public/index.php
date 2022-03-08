@@ -1,5 +1,6 @@
 <?php
-
+var_dump("test-api");
+die();
 define( 'ROOT', dirname( __DIR__, 2 ) . DIRECTORY_SEPARATOR );
 
 // api config
