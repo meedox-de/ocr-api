@@ -26,7 +26,7 @@ spl_autoload_register( 'autoload', true );
 session_start();
 
 // check class
-$namespace  = 'api\\controller\\';
+$namespace  = 'console\\controller\\';
 $controller = $routes[\common\lib\FunctionalHelper::get( 't' )] ?? false;
 
 if( !$controller )
