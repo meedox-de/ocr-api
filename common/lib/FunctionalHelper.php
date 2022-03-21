@@ -2,6 +2,8 @@
 
 namespace common\lib;
 
+use Exception;
+
 
 class FunctionalHelper
 {
@@ -53,5 +55,19 @@ class FunctionalHelper
     public static function submitToken() :string
     {
         return uniqid();
+    }
+
+
+    /**
+     * Generates unique random string. Default length is 8 chars
+     *
+     * @param int $length
+     *
+     * @return string
+     * @throws Exception
+     */
+    public static function getRandomString(int $length = 8) :string
+    {
+        return bin2hex( random_bytes( $length / 2 ) );
     }
 }
