@@ -17,6 +17,9 @@ class MigrationPlanModel extends AbstractDatabaseProcessing
         'updated_at',
     ];
 
+    public const MIGRATION_DIRECTION_UP   = 'up';
+    public const MIGRATION_DIRECTION_DOWN = 'down';
+
 
     /**
      * @return static
