@@ -19,10 +19,13 @@ class OcrRequest
      * 1 - security token wrong
      * 2 - sourceApi dont exists
      * 3 - data array dont exists
-     * 4 - entry already exists
+     * 4 - file array dont exists
+     * 5 - entry already exists
      */
     public function __construct()
     {
+        header('Content-Type: application/json');
+
         $token           = FunctionalHelper::post( 'token' );
         $this->sourceApi = (int) FunctionalHelper::post( 'sourceApi' );
 
@@ -54,6 +57,18 @@ class OcrRequest
         }
         $data = json_decode( $_POST['queueOcrApiArray'] );
 
+        // check files
+        if( !isset( $_POST['files'] ) )
+        {
+            $this->response['errors'][] = [
+                'code' => 4,
+            ];
+            return false;
+        }
+var_dump($_FILES);
+        die();
+        //move_uploaded_file(json_decode($_POST['files']['path']), CONSOLE . 'public' . DIRECTORY_SEPARATOR . 'cb0cfe7c570530d4.pdf' );
+
         if( $this->getQueueOcrEntries( $data ) )
         {
             $this->response['success'] = true;
@@ -78,7 +93,7 @@ class OcrRequest
             if( QueueOcrModel::find()->sourceApi( $this->sourceApi )->sourceId( $ocrEntry->id )->fileName( $ocrEntry->file_name )->exists() )
             {
                 $this->response['errors'][] = [
-                    'code' => 4,
+                    'code' => 5,
                     'id'   => $ocrEntry->id,
                 ];
                 continue;
