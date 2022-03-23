@@ -5,3 +5,4 @@
 .idea/ocr-api.iml
 .idea/vcs.xml
 common/global_config/errorReporting.php
+console/data

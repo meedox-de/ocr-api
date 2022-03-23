@@ -17,15 +17,15 @@ class OcrRequest
     /**
      * error numbers:
      * 1 - security token wrong
-     * 2 - sourceApi dont exists
-     * 3 - data array dont exists
-     * 4 - file array dont exists
+     * 2 - sourceApi don't exist
+     * 3 - data array don't exist
+     * 4 - file array is empty
      * 5 - entry already exists
+     * 6 - ocrEntry associated file don't exist
+     * 7 - file can't move
      */
     public function __construct()
     {
-        header('Content-Type: application/json');
-
         $token           = FunctionalHelper::post( 'token' );
         $this->sourceApi = (int) FunctionalHelper::post( 'sourceApi' );
 
@@ -35,7 +35,7 @@ class OcrRequest
             $this->response['errors'][] = [
                 'code' => 1,
             ];
-            return false;
+            $this->sendResponse();
         }
 
         // check sourceApi exists
@@ -44,7 +44,7 @@ class OcrRequest
             $this->response['errors'][] = [
                 'code' => 2,
             ];
-            return false;
+            $this->sendResponse();
         }
 
         // check data array exists
@@ -53,33 +53,40 @@ class OcrRequest
             $this->response['errors'][] = [
                 'code' => 3,
             ];
-            return false;
+            $this->sendResponse();
         }
         $data = json_decode( $_POST['queueOcrApiArray'] );
 
         // check files
-        if( !isset( $_POST['files'] ) )
+        if( empty( $_FILES ) )
         {
             $this->response['errors'][] = [
                 'code' => 4,
             ];
-            return false;
+            $this->sendResponse();
         }
-var_dump($_FILES);
-        die();
-        //move_uploaded_file(json_decode($_POST['files']['path']), CONSOLE . 'public' . DIRECTORY_SEPARATOR . 'cb0cfe7c570530d4.pdf' );
 
+        // save data
         if( $this->getQueueOcrEntries( $data ) )
         {
             $this->response['success'] = true;
         }
 
-        header( 'Content-Type:application/json;charset=utf-8' );
-        echo json_encode( $this->response );
+        $this->sendResponse();
     }
 
     /**
-     * gets all entries for ocr queue
+     * @return void
+     */
+    private function sendResponse() :void
+    {
+        header( 'Content-Type:application/json;charset=utf-8' );
+        echo json_encode( $this->response );
+        die();
+    }
+
+    /**
+     * gets all entries for ocr queue with associated files
      *
      * @param array $data
      *
@@ -94,6 +101,37 @@ var_dump($_FILES);
             {
                 $this->response['errors'][] = [
                     'code' => 5,
+                    'id'   => $ocrEntry->id,
+                ];
+                continue;
+            }
+
+            // check file exists in $_FILES
+            $arrayName = str_replace('.', '_',$ocrEntry->file_name);
+            if(!isset($_FILES[$arrayName]))
+            {
+                $this->response['errors'][] = [
+                    'code' => 6,
+                    'id'   => $ocrEntry->id,
+                ];
+                continue;
+            }
+
+            $uploadedFile = $_FILES[$arrayName];
+
+            // check temp directory exists or generate it
+            $queueFilePath = DATA . 'queueOcrFiles';
+            if( !is_dir( $queueFilePath ) )
+            {
+                mkdir( $queueFilePath, 0777, true );
+            }
+
+            // move file
+            $queueFilePath .= DIRECTORY_SEPARATOR . $ocrEntry->file_name;
+            if( !move_uploaded_file( $uploadedFile['tmp_name'], $queueFilePath ) )
+            {
+                $this->response['errors'][] = [
+                    'code' => 7,
                     'id'   => $ocrEntry->id,
                 ];
                 continue;
