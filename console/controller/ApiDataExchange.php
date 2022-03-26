@@ -5,7 +5,7 @@ namespace console\controller;
 use common\lib\FunctionalHelper;
 use common\models\QueueOcrModel;
 
-class OcrRequest
+class ApiDataExchange
 {
     private string $token     = 'ynlom8q2ifntyb07';
     private int    $sourceApi = 0;
