@@ -2,17 +2,33 @@
 
 namespace console\controller;
 
-
 use common\models\QueueOcrModel;
+use DateTime;
+use Imagick;
+
 
 class CronjobOcrRequest
 {
-    private int $numberOfRecognizingFiles = 1;
+    private int   $numberOfRecognizingFiles = 1;
+    private array $ocrDpi                   = [
+        300,
+        450,
+        600,
+    ];
 
     public function __construct()
     {
         $ocrQueue = $this->getOcrQueue();
-        var_dump( $ocrQueue );
+
+        for( $key = 0; $key < $this->numberOfRecognizingFiles; $key++ )
+        {
+            $request = $ocrQueue[$key];
+            $file = DATA . 'queueOcrFiles' . DIRECTORY_SEPARATOR . $request->file_name;
+
+            $startTime = new DateTime();
+
+            $this->startImagick($file);
+        }
     }
 
     /**
@@ -31,8 +47,14 @@ class CronjobOcrRequest
     }
 
 
-    private function getImage()
+    /**
+     * @throws \ImagickException
+     */
+    private function startImagick(string $file)
     {
-
+        $imagick = new Imagick();
+        $imagick->pingImage($file);
+        $pages = $imagick->getNumberImages();
+        $resolution = $imagick->getImageResolution();
     }
 }

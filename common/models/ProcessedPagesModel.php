@@ -14,6 +14,8 @@ class ProcessedPagesModel extends AbstractDatabaseProcessing
         'page_number',
         'page_words',
         'page_text',
+        'page_resolution_x',
+        'page_resolution_y',
         'created_at',
         'updated_at',
     ];

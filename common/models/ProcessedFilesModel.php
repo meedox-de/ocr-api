@@ -15,6 +15,7 @@ class ProcessedFilesModel extends AbstractDatabaseProcessing
         'file_name',
         'file_pages',
         'file_words',
+        'ocr_time',
         'created_at',
         'updated_at',
     ];
