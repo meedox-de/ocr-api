@@ -19,7 +19,7 @@ class m2_add_ocr_processed_table
                                                                       `file_name` varchar(32) COLLATE utf8mb4_bin NOT NULL,
                                                                       `file_pages` int(11) NOT NULL,
                                                                       `file_words` int(11) NOT NULL,
-                                                                      `ocr_time` int NOT NULL,
+                                                                      `ocr_time` varchar(10) COLLATE utf8mb4_bin NOT NULL,
                                                                       `created_at` DATETIME NOT NULL , 
                                                                       `updated_at` DATETIME NULL DEFAULT NULL , 
                                                                 PRIMARY KEY (`id`)) ENGINE = InnoDB;" );

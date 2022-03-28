@@ -9,6 +9,8 @@ require_once(CONFIG . 'routes.php');
 // common directories
 require_once(ROOT . 'common/global_config/config.php');
 
+// composer autoloader
+require ROOT . 'vendor/autoload.php';
 
 // autoloader
 function autoload($class)

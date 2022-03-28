@@ -13,6 +13,8 @@ class QueueOcrModel extends AbstractDatabaseProcessing
         'source_api',
         'source_id',
         'file_name',
+        'runs',
+        'error_message',
         'created_at',
         'updated_at',
     ];

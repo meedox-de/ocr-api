@@ -421,28 +421,54 @@ abstract class AbstractDatabaseProcessing
     }
 
     /**
-     * @return false|mixed
+     * @param bool $returnRawSql
+     *
+     * @return false|PDOStatement
      */
-    public function one() :mixed
+    public function createQuery(bool $returnRawSql = false) :false|PDOStatement
     {
         $this->createSelectStatement();
         $this->createWhereStatement();
 
-        /*
-        var_dump( $this->query . $this->leftJoins . $this->whereStatement . $this->groupByStatements . $this->orderByStatements );
-        var_dump( $this->whereValues );
-        die();
-        */
+        $sql = $this->pdoConn->prepare( $this->query . $this->leftJoins . $this->whereStatement . $this->groupByStatements . $this->orderByStatements . $this->limitStatement );
 
-        $sql = $this->pdoConn->prepare( $this->query . $this->leftJoins . $this->whereStatement . $this->groupByStatements . $this->orderByStatements . ' LIMIT 1' );
-        // Fehlerausgabe wenn Query incorect
+        // check query incorrect
         if( !$this->checkQueryIncorect( $sql ) )
         {
             $this->message = '250';
             return false;
         }
 
+        if( $returnRawSql )
+        {
+            return $sql;
+        }
+
         $this->checkSqlExecuteSuccess( $sql->execute( $this->whereValues ), $sql );
+        return $sql;
+    }
+
+    /**
+     * @return false|PDOStatement
+     */
+    public function rawSql() :false|PDOStatement
+    {
+        return $this->createQuery( true );
+    }
+
+    /**
+     * @return false|null
+     */
+    public function one() :mixed
+    {
+        $this->limitStatement = ' LIMIT 1';
+
+        $sql = $this->createQuery();
+        if( !$sql )
+        {
+            return false;
+        }
+
         return $sql->fetch( PDO::FETCH_OBJ );
     }
 
@@ -451,25 +477,12 @@ abstract class AbstractDatabaseProcessing
      */
     public function all() :array|false
     {
-        $this->createSelectStatement();
-        $this->createWhereStatement();
-
-        /*
-        var_dump( $this->query . $this->leftJoins . $this->whereStatement . $this->groupByStatements . $this->orderByStatements );
-        var_dump( $this->whereValues );
-        die();
-        */
-
-        $sql = $this->pdoConn->prepare( $this->query . $this->leftJoins . $this->whereStatement . $this->groupByStatements . $this->orderByStatements );
-
-        // Fehlerausgabe wenn Query incorect
-        if( !$this->checkQueryIncorect( $sql ) )
+        $sql = $this->createQuery();
+        if( !$sql )
         {
-            $this->message = '250';
             return false;
         }
 
-        $this->checkSqlExecuteSuccess( $sql->execute( $this->whereValues ), $sql );
         return $sql->fetchAll( PDO::FETCH_OBJ );
     }
 
@@ -478,17 +491,11 @@ abstract class AbstractDatabaseProcessing
      */
     public function count() :bool
     {
-        $this->createSelectStatement();
-        $this->createWhereStatement();
-
-        $sql = $this->pdoConn->prepare( $this->query . $this->whereStatement );
-        // Fehlerausgabe wenn Query incorect
-        if( !$this->checkQueryIncorect( $sql ) )
+        $sql = $this->createQuery();
+        if( !$sql )
         {
-            $this->message = '250';
             return false;
         }
-        $this->checkSqlExecuteSuccess( $sql->execute( $this->whereValues ), $sql );
 
         return $sql->rowCount();
     }
@@ -498,17 +505,11 @@ abstract class AbstractDatabaseProcessing
      */
     public function exists() :bool
     {
-        $this->createSelectStatement();
-        $this->createWhereStatement();
-
-        $sql = $this->pdoConn->prepare( $this->query . $this->whereStatement );
-        // Fehlerausgabe wenn Query incorect
-        if( !$this->checkQueryIncorect( $sql ) )
+        $sql = $this->createQuery();
+        if( !$sql )
         {
-            $this->message = '250';
             return false;
         }
-        $this->checkSqlExecuteSuccess( $sql->execute( $this->whereValues ), $sql );
 
         if( $sql->fetch() )
         {
