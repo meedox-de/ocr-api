@@ -107,8 +107,8 @@ class ApiDataExchange
             }
 
             // check file exists in $_FILES
-            $arrayName = str_replace('.', '_',$ocrEntry->file_name);
-            if(!isset($_FILES[$arrayName]))
+            $arrayName = str_replace( '.', '_', $ocrEntry->file_name );
+            if( !isset( $_FILES[$arrayName] ) )
             {
                 $this->response['errors'][] = [
                     'code' => 6,
