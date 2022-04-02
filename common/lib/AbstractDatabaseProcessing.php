@@ -198,12 +198,6 @@ abstract class AbstractDatabaseProcessing
             $valueString .= 'updated_at = NOW()';
         }
 
-        /*
-        var_dump( $this->pdoConn->prepare( 'UPDATE ' . $this->calledClass::TABLE_NAME . ' SET ' . $valueString . $this->whereStatement . $this->limitStatement) );
-        var_dump( $this->whereValues );
-        die();
-        */
-
         $sql = $this->pdoConn->prepare( 'UPDATE ' . $this->calledClass::TABLE_NAME . ' SET ' . $valueString . $this->whereStatement . $this->limitStatement );
 
         // Fehlerausgabe wenn Query incorect
@@ -223,12 +217,6 @@ abstract class AbstractDatabaseProcessing
     public function delete() :bool
     {
         $this->createWhereStatement();
-        #TODO - Fehler wenn kein Where Statement existiert
-        /*
-                var_dump( $this->pdoConn->prepare( 'DELETE FROM ' . $this->calledClass::TABLE_NAME . $this->whereStatement . $this->limitStatement ) );
-                var_dump( $this->whereValues );
-                die();
-        */
         $sql = $this->pdoConn->prepare( 'DELETE FROM ' . $this->calledClass::TABLE_NAME . $this->whereStatement . $this->limitStatement );
 
         // Fehlerausgabe wenn Query incorect
