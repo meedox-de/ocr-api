@@ -10,8 +10,8 @@ class ApiDataExchange
     private string $token     = 'ynlom8q2ifntyb07';
     private int    $sourceApi = 0;
     private array  $response  = [
-        'errors'  => [],
         'success' => false,
+        'errors'  => [],
     ];
 
     /**
