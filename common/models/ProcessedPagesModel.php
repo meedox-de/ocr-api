@@ -47,7 +47,7 @@ class ProcessedPagesModel extends AbstractDatabaseProcessing
      */
     public function fileId(int $fileId) :static
     {
-        $this->whereValues['fileId'] = $fileId;
+        $this->whereValues['file_id'] = $fileId;
         return $this;
     }
 }

@@ -3,6 +3,8 @@
 namespace console\controller;
 
 use common\lib\FunctionalHelper;
+use common\models\ProcessedFilesModel;
+use common\models\ProcessedPagesModel;
 use common\models\QueueOcrModel;
 
 class ApiDataExchange
@@ -12,6 +14,7 @@ class ApiDataExchange
     private array  $response  = [
         'success' => false,
         'errors'  => [],
+        'processedFiles' => []
     ];
 
     /**
@@ -58,7 +61,7 @@ class ApiDataExchange
         $data = json_decode( $_POST['queueOcrApiArray'] );
 
         // check files
-        if( empty( $_FILES ) )
+        if( !empty( $data ) && empty( $_FILES ) )
         {
             $this->response['errors'][] = [
                 'code' => 4,
@@ -71,6 +74,8 @@ class ApiDataExchange
         {
             $this->response['success'] = true;
         }
+
+        $this->getProcessedEntries();
 
         $this->sendResponse();
     }
@@ -146,5 +151,21 @@ class ApiDataExchange
                                            ] );
         }
         return true;
+    }
+
+    /**
+     * gets all ocr procesed files and associated pages
+     *
+     * @return void
+     */
+    private function getProcessedEntries() :void
+    {
+        foreach( ProcessedFilesModel::find()->all() as $page )
+        {
+            $this->response['processedFiles'][] = [
+                'file'  => $page,
+                'pages' => ProcessedPagesModel::find()->fileId( $page->id )->all(),
+            ];
+        }
     }
 }
