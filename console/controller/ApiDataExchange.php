@@ -12,9 +12,9 @@ class ApiDataExchange
     private string $token     = 'ynlom8q2ifntyb07';
     private int    $sourceApi = 0;
     private array  $response  = [
-        'success' => false,
-        'errors'  => [],
-        'processedFiles' => []
+        'success'        => false,
+        'errors'         => [],
+        'processedFiles' => [],
     ];
 
     /**
@@ -29,8 +29,7 @@ class ApiDataExchange
      */
     public function __construct()
     {
-        $token           = FunctionalHelper::post( 'token' );
-        $this->sourceApi = (int) FunctionalHelper::post( 'sourceApi' );
+        $token = FunctionalHelper::post( 'token' );
 
         // check security token
         if( $token !== $this->token )
@@ -40,6 +39,26 @@ class ApiDataExchange
             ];
             $this->sendResponse();
         }
+
+        // choose request type
+        if( isset( $_POST['queueOcrApiArray'] ) )
+        {
+            $this->receivingRequest();
+        }
+        elseif( isset( $_POST['deleteIds'] ) )
+        {
+            $this->deleteRequest( json_decode( $_POST['deleteIds'] ) );
+        }
+    }
+
+    /**
+     * saves all received documents for ocr queue
+     *
+     * @return void
+     */
+    private function receivingRequest() :void
+    {
+        $this->sourceApi = (int) FunctionalHelper::post( 'sourceApi' );
 
         // check sourceApi exists
         if( !in_array( $this->sourceApi, QueueOcrModel::SOURCE_API_IDS ) )
@@ -79,6 +98,25 @@ class ApiDataExchange
 
         $this->sendResponse();
     }
+
+    /**
+     * Deletes all files returned by the api
+     *
+     * @param array $deleteArray
+     *
+     * @return void
+     */
+    private function deleteRequest(array $deleteArray) :void
+    {
+        foreach( $deleteArray as $id )
+        {
+            ProcessedPagesModel::find()->fileId( $id )->delete();
+            ProcessedFilesModel::find()->id( $id )->delete();
+        }
+
+        die();
+    }
+
 
     /**
      * @return void
@@ -167,5 +205,7 @@ class ApiDataExchange
                 'pages' => ProcessedPagesModel::find()->fileId( $page->id )->all(),
             ];
         }
+
+        #TODO - übergebene Daten aus DB entfernen
     }
 }
