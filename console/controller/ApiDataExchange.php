@@ -205,7 +205,5 @@ class ApiDataExchange
                 'pages' => ProcessedPagesModel::find()->fileId( $page->id )->all(),
             ];
         }
-
-        #TODO - übergebene Daten aus DB entfernen
     }
 }
