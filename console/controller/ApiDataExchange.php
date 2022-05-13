@@ -149,7 +149,7 @@ class ApiDataExchange
                 continue;
             }
 
-            // check file exists in $_FILES
+            // check file exist in $_FILES
             $arrayName = str_replace( '.', '_', $ocrEntry->file_name );
             if( !isset( $_FILES[$arrayName] ) )
             {
@@ -182,9 +182,10 @@ class ApiDataExchange
 
             QueueOcrModel::find()->insert( [
                                                'insertColumns' => [
-                                                   'source_api' => $this->sourceApi,
-                                                   'source_id'  => $ocrEntry->id,
-                                                   'file_name'  => $ocrEntry->file_name,
+                                                   'source_api'     => $this->sourceApi,
+                                                   'source_id'      => $ocrEntry->id,
+                                                   'file_name'      => $ocrEntry->file_name,
+                                                   'file_extension' => $ocrEntry->file_extension,
                                                ],
                                            ] );
         }

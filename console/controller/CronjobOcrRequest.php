@@ -85,10 +85,13 @@ class CronjobOcrRequest
     /**
      * creates from every page a png and start tesseract
      *
+     * @param int    $id
      * @param string $file
      *
      * @return bool
      * @throws ImagickException
+     * @throws TesseractOcrException
+     * @throws UnsuccessfulCommandException
      */
     private function startImagick(int $id, string $file) :bool
     {

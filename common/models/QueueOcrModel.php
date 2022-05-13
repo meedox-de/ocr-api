@@ -13,6 +13,7 @@ class QueueOcrModel extends AbstractDatabaseProcessing
         'source_api',
         'source_id',
         'file_name',
+        'file_extension',
         'runs',
         'error_message',
         'created_at',
@@ -26,6 +27,9 @@ class QueueOcrModel extends AbstractDatabaseProcessing
         self::SOURCE_API_MEEDOX,
         self::SOURCE_API_PRIVATE,
     ];
+
+    public const FILE_EXTENSION_PDF   = 'pdf';
+    public const FILE_EXTENSION_IMAGE = 'image';
 
     /**
      * @return static
