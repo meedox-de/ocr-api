@@ -1,6 +1,6 @@
 <?php
 
-namespace common\migrations\managementDb;
+namespace common\migrations;
 
 use common\models\DBModel;
 
