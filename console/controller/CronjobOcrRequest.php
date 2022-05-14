@@ -54,6 +54,8 @@ class CronjobOcrRequest
             $file                 = DATA . 'queueOcrFiles' . DIRECTORY_SEPARATOR . $request->file_name;
 
             $startTime = new DateTime();
+            $this->documentResult['file_words'] = 0;
+            $this->documentResult['pages']      = 1;
 
             if( in_array( $request->file_extension, self::EXTENSIONS_FOR_IMAGICK ) )
             {
@@ -121,7 +123,6 @@ class CronjobOcrRequest
         $pages                              = $imagick->getNumberImages();
         $this->documentResult['pages']      = $pages;
         $this->documentResult['resolution'] = $imagick->getImageResolution()['x'];
-        $this->documentResult['file_words'] = 0;
 
         $imagick->setResolution( $this->ocrDpi, $this->ocrDpi );
         $imagick->setImageFormat( 'png' );
