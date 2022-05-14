@@ -25,6 +25,17 @@ class CronjobOcrRequest
         'file_words',
     ];
 
+    private const MIME_TYPES_PDF        = 'application/pdf';
+    private const MIME_TYPES_IMAGE_HEIC = 'image/heic';
+    private const MIME_TYPES_IMAGE_JPEG = 'image/jpeg';
+    private const MIME_TYPES_IMAGE_GIF  = 'image/gif';
+    private const MIME_TYPES_IMAGE_PNG  = 'image/png';
+
+    private const EXTENSIONS_FOR_IMAGICK = [
+        self::MIME_TYPES_PDF,
+        self::MIME_TYPES_IMAGE_HEIC,
+    ];
+
 
     /**
      * @throws ImagickException
@@ -44,9 +55,19 @@ class CronjobOcrRequest
 
             $startTime = new DateTime();
 
-            if( !$this->startImagick( $request->id, $file ) )
+            if( in_array( $request->file_extension, self::EXTENSIONS_FOR_IMAGICK ) )
             {
-                continue;
+                if( !$this->startImagick( $request->id, $file ) )
+                {
+                    continue;
+                }
+            }
+            else
+            {
+                if( !$this->startTesseract( $request->id, $file ) )
+                {
+                    continue;
+                }
             }
 
             $endTime = new DateTime();
