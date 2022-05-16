@@ -20,12 +20,14 @@ class QueueOcrModel extends AbstractDatabaseProcessing
         'updated_at',
     ];
 
-    public const SOURCE_API_MEEDOX  = 1;
-    public const SOURCE_API_PRIVATE = 2;
+    public const SOURCE_API_MEEDOX      = 1;
+    public const SOURCE_API_PRIVATE     = 2;
+    public const SOURCE_API_PRIVATE_DEV = 3;
 
     public const SOURCE_API_IDS = [
         self::SOURCE_API_MEEDOX,
         self::SOURCE_API_PRIVATE,
+        self::SOURCE_API_PRIVATE_DEV,
     ];
 
     public const FILE_EXTENSION_PDF   = 'pdf';
