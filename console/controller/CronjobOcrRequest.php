@@ -131,13 +131,14 @@ class CronjobOcrRequest
             }
 
             $tempFile = $tempPath . DIRECTORY_SEPARATOR . 'temp.png';
+            $pdfFile = $tempPath . DIRECTORY_SEPARATOR . 'testArchive.pdf';
 
             // create png from pdf page
             $imagick->writeImage( $tempFile );
 
             // save pdf
             $imagick->setImageFormat( 'PDFA-1' );
-            $imagick->writeImage();
+            $imagick->writeImage($pdfFile);
 
             // error
             if( !is_file( $tempFile ) )
