@@ -53,23 +53,13 @@ class CronjobOcrRequest
             $request              = $ocrQueue[$key];
             $file                 = DATA . 'queueOcrFiles' . DIRECTORY_SEPARATOR . $request->file_name;
 
-            $startTime = new DateTime();
+            $startTime                          = new DateTime();
             $this->documentResult['file_words'] = 0;
             $this->documentResult['pages']      = 1;
 
-            if( in_array( $request->file_extension, self::EXTENSIONS_FOR_IMAGICK ) )
+            if( !$this->startImagick( $request->id, $file ) )
             {
-                if( !$this->startImagick( $request->id, $file ) )
-                {
-                    continue;
-                }
-            }
-            else
-            {
-                if( !$this->startTesseract( $request->id, $file ) )
-                {
-                    continue;
-                }
+                continue;
             }
 
             $endTime = new DateTime();
@@ -144,6 +134,10 @@ class CronjobOcrRequest
 
             // create png from pdf page
             $imagick->writeImage( $tempFile );
+
+            // save pdf
+            $imagick->setImageFormat( 'PDFA-1' );
+            $imagick->writeImage();
 
             // error
             if( !is_file( $tempFile ) )
