@@ -137,7 +137,7 @@ class CronjobOcrRequest
             $imagick->writeImage( $tempFile );
 
             // save pdf
-            $imagick->setImageFormat( 'PDFA-1' );
+            $imagick->setImageFormat( 'PDFA' );
             $imagick->writeImage($pdfFile);
 
             // error
