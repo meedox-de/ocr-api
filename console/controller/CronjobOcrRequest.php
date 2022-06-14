@@ -57,7 +57,7 @@ class CronjobOcrRequest
             $this->documentResult['file_words'] = 0;
             $this->documentResult['pages']      = 1;
 
-            if( !$this->startImagick( $request->id, $file ) )
+            if( !$this->startImagick( $request->id, $file, $request->file_name ) )
             {
                 continue;
             }
@@ -106,13 +106,23 @@ class CronjobOcrRequest
      * @throws TesseractOcrException
      * @throws UnsuccessfulCommandException
      */
-    private function startImagick(int $id, string $file) :bool
+    private function startImagick(int $id, string $filePath, string $fileName) :bool
     {
         $imagick = new Imagick();
-        $imagick->pingImage( $file );
+        $imagick->pingImage( $filePath );
         $pages                              = $imagick->getNumberImages();
         $this->documentResult['pages']      = $pages;
         $this->documentResult['resolution'] = $imagick->getImageResolution()['x'];
+
+        // generate PDF
+        $pdfDirectory = DATA . 'pdfFiles';
+        if( !is_dir( $pdfDirectory ) )
+        {
+            mkdir( $pdfDirectory, 0777, true );
+        }
+        $imagick->setImageFormat( 'pdf' );
+        $imagick->writeImage($pdfDirectory . DIRECTORY_SEPARATOR . $fileName . '.pdf');
+
 
         $imagick->setResolution( $this->ocrDpi, $this->ocrDpi );
         $imagick->setImageFormat( 'png' );
@@ -121,7 +131,7 @@ class CronjobOcrRequest
         for( $currentPage = 0; $currentPage < $pages; $currentPage++ )
         {
             // read specific page
-            $imagick->readImage( $file . '[' . $currentPage . ']' );
+            $imagick->readImage( $filePath . '[' . $currentPage . ']' );
 
             // check temp directory exists or generate it
             $tempPath = DATA . 'temp';
@@ -131,14 +141,10 @@ class CronjobOcrRequest
             }
 
             $tempFile = $tempPath . DIRECTORY_SEPARATOR . 'temp.png';
-            $pdfFile = $tempPath . DIRECTORY_SEPARATOR . 'testArchive.pdf';
+
 
             // create png from pdf page
             $imagick->writeImage( $tempFile );
-
-            // save pdf
-            $imagick->setImageFormat( 'PDFA' );
-            $imagick->writeImage($pdfFile);
 
             // error
             if( !is_file( $tempFile ) )
