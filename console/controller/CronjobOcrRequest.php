@@ -43,11 +43,10 @@ class CronjobOcrRequest
     public function __construct()
     {
         $ocrQueue = $this->getOcrQueue();
-var_dump($ocrQueue);
-die();
-        if( is_null($ocrQueue))
-        {
 
+        if( empty($ocrQueue))
+        {
+            return;
         }
 
         // deactivate time limit because there is no limit for the number of files being uploaded
