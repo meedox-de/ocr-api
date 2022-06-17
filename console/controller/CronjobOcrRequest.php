@@ -62,7 +62,7 @@ class CronjobOcrRequest
             $this->documentResult['file_words'] = 0;
             $this->documentResult['pages']      = 1;
 
-            if( !$this->startImagick( $request->id, $file, $request->file_name ) )
+            if( !$this->startImagick( $request->id, $file) )
             {
                 continue;
             }
@@ -104,29 +104,20 @@ class CronjobOcrRequest
      * creates from every page a png and start tesseract
      *
      * @param int    $id
-     * @param string $file
+     * @param string $filePath
      *
      * @return bool
      * @throws ImagickException
      * @throws TesseractOcrException
      * @throws UnsuccessfulCommandException
      */
-    private function startImagick(int $id, string $filePath, string $fileName) :bool
+    private function startImagick(int $id, string $filePath) :bool
     {
         $imagick = new Imagick();
         $imagick->pingImage( $filePath );
         $pages                              = $imagick->getNumberImages();
         $this->documentResult['pages']      = $pages;
         $this->documentResult['resolution'] = $imagick->getImageResolution()['x'];
-
-        // generate PDF
-        $pdfDirectory = DATA . 'pdfFiles';
-        if( !is_dir( $pdfDirectory ) )
-        {
-            mkdir( $pdfDirectory, 0777, true );
-        }
-        $imagick->setImageFormat( 'pdf' );
-        $imagick->writeImage($pdfDirectory . DIRECTORY_SEPARATOR . $fileName . '.pdf');
 
 
         $imagick->setResolution( $this->ocrDpi, $this->ocrDpi );
@@ -179,12 +170,11 @@ class CronjobOcrRequest
 
 
     /**
+     * @param int    $id
      * @param string $tempFile
      * @param int    $currentPage
      *
      * @return bool
-     * @throws TesseractOcrException
-     * @throws UnsuccessfulCommandException
      */
     private function startTesseract(int $id, string $tempFile, int $currentPage = 0) :bool
     {
