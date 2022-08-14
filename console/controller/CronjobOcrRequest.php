@@ -45,7 +45,7 @@ class CronjobOcrRequest
         {
             $this->documentResult = [];
             $request              = $ocrQueue[$key];
-            $file                 = DATA . 'queueOcrFiles' . DIRECTORY_SEPARATOR . $request->file_name;
+            $file                 = DATA . 'queueOcrFiles' . DIRECTORY_SEPARATOR . $request->file_name . '.' . QueueOcrModel::EXTENSION_PDF;
 
             $startTime                          = new DateTime();
             $this->documentResult['file_words'] = 0;
