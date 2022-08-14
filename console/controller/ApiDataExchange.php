@@ -169,9 +169,10 @@ class ApiDataExchange
                 mkdir( $queueFilePath, 0777, true );
             }
 
+
             // move file
-            $queueFilePath .= DIRECTORY_SEPARATOR . $ocrEntry->file_name;
-            if( !move_uploaded_file( $uploadedFile['tmp_name'], $queueFilePath ) )
+            $file = $queueFilePath . DIRECTORY_SEPARATOR . $ocrEntry->file_name . '.' . QueueOcrModel::EXTENSION_PDF;
+            if( !move_uploaded_file( $uploadedFile['tmp_name'], $file ) )
             {
                 $this->response['errors'][] = [
                     'code' => 7,

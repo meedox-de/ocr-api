@@ -25,17 +25,6 @@ class CronjobOcrRequest
         'file_words',
     ];
 
-    private const MIME_TYPES_PDF        = 'application/pdf';
-    private const MIME_TYPES_IMAGE_HEIC = 'image/heic';
-    private const MIME_TYPES_IMAGE_JPEG = 'image/jpeg';
-    private const MIME_TYPES_IMAGE_GIF  = 'image/gif';
-    private const MIME_TYPES_IMAGE_PNG  = 'image/png';
-
-    private const EXTENSIONS_FOR_IMAGICK = [
-        self::MIME_TYPES_PDF,
-        self::MIME_TYPES_IMAGE_HEIC,
-    ];
-
 
     /**
      * @throws ImagickException
@@ -118,7 +107,6 @@ class CronjobOcrRequest
         $pages                              = $imagick->getNumberImages();
         $this->documentResult['pages']      = $pages;
         $this->documentResult['resolution'] = $imagick->getImageResolution()['x'];
-
 
         $imagick->setResolution( $this->ocrDpi, $this->ocrDpi );
         $imagick->setImageFormat( 'png' );

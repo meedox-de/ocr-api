@@ -30,8 +30,8 @@ class QueueOcrModel extends AbstractDatabaseProcessing
         self::SOURCE_API_PRIVATE_DEV,
     ];
 
-    public const FILE_EXTENSION_PDF   = 'pdf';
-    public const FILE_EXTENSION_IMAGE = 'image';
+    public const EXTENSION_PDF = 'pdf';
+
 
     /**
      * @return static
