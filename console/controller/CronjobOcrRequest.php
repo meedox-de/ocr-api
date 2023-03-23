@@ -32,7 +32,6 @@ class CronjobOcrRequest
     public function __construct()
     {
         $ocrQueue = $this->getOcrQueue();
-
         if( empty($ocrQueue))
         {
             return;

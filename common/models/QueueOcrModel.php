@@ -14,6 +14,7 @@ class QueueOcrModel extends AbstractDatabaseProcessing
         'source_id',
         'file_name',
         'file_extension',
+        'in_process',
         'runs',
         'error_message',
         'created_at',
@@ -82,6 +83,13 @@ class QueueOcrModel extends AbstractDatabaseProcessing
     public function fileName(string $fileName) :static
     {
         $this->whereValues['file_name'] = $fileName;
+        return $this;
+    }
+
+
+    public function inProcess(bool $inProcess) :static
+    {
+        $this->whereValues['in_process'] = $inProcess;
         return $this;
     }
 }
