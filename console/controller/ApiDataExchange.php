@@ -137,6 +137,8 @@ class ApiDataExchange
      */
     private function getQueueOcrEntries(array $data) :bool
     {
+        #TODO - Fehlermeldungen bzw. response anpassen und prüfen ob diese auch verarbeitet werden können
+
         foreach( $data as $ocrEntry )
         {
             // check duplicate entries

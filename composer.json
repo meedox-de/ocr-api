@@ -1,6 +1,6 @@
 {
     "require": {
         "mpdf/mpdf": "^8.1",
-        "vaites/php-apache-tika": "^1.2"
+        "vaites/php-apache-tika": "1.2.4"
     }
 }

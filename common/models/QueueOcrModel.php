@@ -86,10 +86,22 @@ class QueueOcrModel extends AbstractDatabaseProcessing
         return $this;
     }
 
-
+    /**
+     * @param bool $inProcess
+     *
+     * @return $this
+     */
     public function inProcess(bool $inProcess) :static
     {
-        $this->whereValues['in_process'] = $inProcess;
+        if( $inProcess )
+        {
+            $this->andWhere( self::TABLE_NAME . '.in_process IS NOT NULL');
+        }
+        else
+        {
+            $this->andWhere( self::TABLE_NAME . '.in_process IS NULL');
+        }
+
         return $this;
     }
 }

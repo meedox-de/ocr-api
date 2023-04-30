@@ -413,7 +413,7 @@ abstract class AbstractDatabaseProcessing
      *
      * @return false|PDOStatement
      */
-    public function createQuery(bool $returnRawSql = false) :false|PDOStatement
+    public function createQuery(bool $returnRawSql = false) :false|array|PDOStatement
     {
         $this->createSelectStatement();
         $this->createWhereStatement();
@@ -429,7 +429,10 @@ abstract class AbstractDatabaseProcessing
 
         if( $returnRawSql )
         {
-            return $sql;
+            return [
+                'queryString' => $sql->queryString,
+                'values'      => $this->whereValues,
+            ];
         }
 
         $this->checkSqlExecuteSuccess( $sql->execute( $this->whereValues ), $sql );
@@ -439,7 +442,7 @@ abstract class AbstractDatabaseProcessing
     /**
      * @return false|PDOStatement
      */
-    public function rawSql() :false|PDOStatement
+    public function rawSql() :array
     {
         return $this->createQuery( true );
     }
@@ -554,7 +557,15 @@ abstract class AbstractDatabaseProcessing
                 if( $whereValue === null )
                 {
                     // add to whereString
-                    $this->whereStatement .= $this->calledClass::TABLE_NAME . '.' . $whereKey . ' is null';
+                    $this->whereStatement .= $this->calledClass::TABLE_NAME . '.' . $whereKey . ' IS NULL';
+
+                    // remove from bind Params
+                    unset( $this->whereValues[$whereKey] );
+                }
+                elseif($whereValue === 'IS NOT NULL')
+                {
+                    // add to whereString
+                    $this->whereStatement .= $this->calledClass::TABLE_NAME . '.' . $whereKey . ' IS NOT NULL';
 
                     // remove from bind Params
                     unset( $this->whereValues[$whereKey] );

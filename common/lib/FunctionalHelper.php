@@ -3,6 +3,7 @@
 namespace common\lib;
 
 use Exception;
+use mysql_xdevapi\Warning;
 
 
 class FunctionalHelper
@@ -70,4 +71,35 @@ class FunctionalHelper
     {
         return bin2hex( random_bytes( $length / 2 ) );
     }
+
+
+    /**
+     * Returns -1 if url is not reachable, otherwise returns the ping time in ms
+     *
+     * @param string $url
+     * @param int    $port
+     * @param int    $timeout
+     *
+     * @return int
+     */
+    public static function pingUrl(string $url, int $port = 80, int $timeout = 10) :?int
+    {
+        $start = microtime( true );
+
+        set_error_handler( function($errno, $errstr)
+        {}, E_WARNING );
+
+        $file = fsockopen( $url, $port, $errno, $errstr, $timeout );
+        restore_error_handler();
+
+        if( !$file )
+        {
+            return null;
+        }
+
+        fclose( $file );
+        return (int) ((microtime( true ) - $start) * 1000);
+    }
+
+
 }
