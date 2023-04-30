@@ -28,11 +28,11 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `migrations` (
-  `name` varchar(255) COLLATE utf8mb4_bin NOT NULL,
-  `executed` enum('up','down','failed') COLLATE utf8mb4_bin NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `executed` enum('up','down','failed') COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL DEFAULT '0000-00-00 00:00:00'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -42,12 +42,12 @@ CREATE TABLE `migrations` (
 
 CREATE TABLE `migration_plan` (
   `id` int(11) NOT NULL,
-  `name` varchar(255) COLLATE utf8mb4_bin NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `active` tinyint(1) NOT NULL DEFAULT 1,
-  `direction` enum('up','down') COLLATE utf8mb4_bin NOT NULL DEFAULT 'up',
+  `direction` enum('up','down') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'up',
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL DEFAULT '0000-00-00 00:00:00'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Indizes der exportierten Tabellen
