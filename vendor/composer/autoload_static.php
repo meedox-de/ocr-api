@@ -11,13 +11,13 @@ class ComposerStaticInitc4ce90e1ab8266239a124c7c42b38087
     );
 
     public static $prefixLengthsPsr4 = array (
-        't' => 
-        array (
-            'thiagoalessio\\TesseractOCR\\' => 27,
-        ),
         's' => 
         array (
             'setasign\\Fpdi\\' => 14,
+        ),
+        'V' => 
+        array (
+            'Vaites\\ApacheTika\\' => 18,
         ),
         'P' => 
         array (
@@ -39,13 +39,13 @@ class ComposerStaticInitc4ce90e1ab8266239a124c7c42b38087
     );
 
     public static $prefixDirsPsr4 = array (
-        'thiagoalessio\\TesseractOCR\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/thiagoalessio/tesseract_ocr/src',
-        ),
         'setasign\\Fpdi\\' => 
         array (
             0 => __DIR__ . '/..' . '/setasign/fpdi/src',
+        ),
+        'Vaites\\ApacheTika\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/vaites/php-apache-tika/src',
         ),
         'Psr\\Log\\' => 
         array (

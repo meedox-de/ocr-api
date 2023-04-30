@@ -1,6 +1,6 @@
 {
     "require": {
-        "thiagoalessio/tesseract_ocr": "^2.12",
-        "mpdf/mpdf": "^8.1"
+        "mpdf/mpdf": "^8.1",
+        "vaites/php-apache-tika": "1.2.4"
     }
 }
