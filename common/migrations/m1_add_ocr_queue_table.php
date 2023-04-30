@@ -12,7 +12,7 @@ class m1_add_ocr_queue_table
      */
     public static function up()
     {
-        DBModel::execute()->sql( "CREATE TABLE `ocr_api`.`queue_ocr` ( 
+        DBModel::execute()->sql( "CREATE TABLE `queue_ocr` ( 
                                                                         `id` INT(11) NOT NULL AUTO_INCREMENT , 
                                                                         `source_api` INT(11) NOT NULL , 
                                                                         `source_id` INT(11) NOT NULL , 
