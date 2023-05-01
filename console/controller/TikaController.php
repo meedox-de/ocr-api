@@ -184,7 +184,6 @@ class TikaController
         return array_key_first( $pingResult );
     }
 
-
     /**
      * Function to get the url from a server
      *
@@ -240,7 +239,6 @@ class TikaController
 
             $result['text']  = $client->getHTML( $file );
             $result['pages'] = $client->getMetadata( $file )->pages;
-            $result['words'] = str_word_count( $result['text'] );
         }
         catch( Exception $e )
         {
@@ -306,6 +304,7 @@ class TikaController
                                                              ],
                                                          ] );
 
+
         // check db entry
         if( !$insertId )
         {
@@ -319,6 +318,7 @@ class TikaController
             return false;
         }
 
+
         // save all recognized pages
         // pages are separated by <div class="page">
         $replacedText = explode( '<div class="page">', $replacedText );
@@ -328,6 +328,8 @@ class TikaController
         foreach( $replacedText as $rawPageText )
         {
             $rawPageText = str_replace( '<div class="ocr">', '', $rawPageText );
+            $rawPageText = str_replace( '<div class="ocr"/>', '', $rawPageText );
+            $rawPageText = str_replace( '<div class="ocr" />', '', $rawPageText );
             $pageText    = str_replace( '</div>', '', $rawPageText );
             $pageText    = trim( $pageText );
 
