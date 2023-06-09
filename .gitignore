@@ -6,4 +6,5 @@
 .idea/vcs.xml
 common/global_config/dbConn.php
 common/global_config/errorReporting.php
+common/global_config/apiConfig.php
 console/data

@@ -10,9 +10,8 @@ use common\models\QueueOcrModel;
 
 class ApiDataExchange
 {
-    private string $token     = 'ynlom8q2ifntyb07';
-    private int    $sourceApi = 0;
-    private array  $response  = [
+    private int   $sourceApi = 0;
+    private array $response  = [
         'success'        => false,
         'errors'         => [],
         'processedFiles' => [],
@@ -33,7 +32,7 @@ class ApiDataExchange
         $token = FunctionalHelper::post( 'token' );
 
         // check security token
-        if( $token !== $this->token )
+        if( $token !== API_DATA_EXCHANGE_TOKEN )
         {
             $this->response['errors'][] = [
                 'code' => 1,
@@ -125,7 +124,7 @@ class ApiDataExchange
     {
         header( 'Content-Type:application/json;charset=utf-8' );
         echo json_encode( $this->response );
-        die();
+        exit();
     }
 
     /**
